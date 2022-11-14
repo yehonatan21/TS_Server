@@ -1,29 +1,43 @@
 import { connect, disconnect } from "../database/database";
-import { GroupModel } from './group.model';
-import { IGroupDocument } from "./group.types";
+import { Response, Request } from 'express';
+import { validateQueryParams } from '../utils/validation'
 
-function create(name: string): string {
-    return `${name} group created`
+connect();
+
+async function create(req: Request, res: Response) {
+    const data = req.query;
+    const status = validateQueryParams(Object(data))
+    res.send('created')
 }
 
-async function get(name: string): Promise<IGroupDocument[]> {
-    connect();
-    return await GroupModel.find({firstName: name});
+async function options(req: Request, res: Response) {
+    res.send('options: get, getAll, create, update, delete')
 }
 
-async function getAll(): Promise<IGroupDocument[]> {
-    connect();
-    return await GroupModel.find({});
+async function get(req: Request, res: Response) {
+    const data = req.query;
+    const status = validateQueryParams(Object(data))
+    res.send('get')
 }
 
-function update(name: string): string {
-    return `${name} group updated`
+async function getAll(req: Request, res: Response) {
+    const data = req.query;
+    const status = validateQueryParams(Object(data))
+    res.send('getAll')
 }
 
-function _delete(name: string): string {
-    return `${name} group deleted`
+function update(req: Request, res: Response) {
+    const data = req.query;
+    const status = validateQueryParams(Object(data))
+    res.send('updated')
 }
 
-disconnect()
+function _delete(req: Request, res: Response) {
+    const data = req.query;
+    const status = validateQueryParams(Object(data))
+    res.send('deleted')
+}
 
-export { create, get, getAll, update, _delete }
+disconnect();
+
+export { create, get, getAll, update, _delete, options }

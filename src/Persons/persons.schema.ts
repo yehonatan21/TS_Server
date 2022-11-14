@@ -1,4 +1,4 @@
-import * as Mongoose from "mongoose";
+import Mongoose from "mongoose";
 
 const PersonsSchema = new Mongoose.Schema({
     firstName: String,

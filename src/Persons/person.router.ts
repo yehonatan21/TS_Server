@@ -1,31 +1,18 @@
-import * as express from 'express';
+import { Router} from 'express';
 import * as controller from './person.controller';
 
-const router: express.Router = express();
+const router: Router = Router();
 
-router.get('/', (req: express.Request, res: express.Response) => {
-    res.send('options: get, getAll, create, update, delete')
-})
+router.get('/', controller.options);
 
-router.get('/get',async (req: express.Request, res: express.Response) => {
-    res.send(await controller.get(String(req.query.name)))
-})
+router.get('/get', controller.get)
 
-router.get('/getAll', async (req: express.Request, res: express.Response) => {
-    res.send(await controller.getAll())
-})
+router.get('/getAll', controller.getAll)
 
-router.post('/create', (req: express.Request, res: express.Response) => {
-    res.send(controller.create(String(req.query.name)))
-})
+router.post('/create', controller.create)
 
-router.put('/update', (req: express.Request, res: express.Response) => {
-    res.send(controller.update(String(req.query.name)))
-})
+router.put('/update', controller.update)
 
-router.delete('/delete', (req: express.Request, res: express.Response) => {
-    res.send(controller._delete(String(req.query.name))
-    )
-})
+router.delete('/delete', controller._delete)
 
 export default router;
