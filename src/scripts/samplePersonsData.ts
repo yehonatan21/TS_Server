@@ -1,4 +1,4 @@
-import { PersonsModel } from "../Persons/persons.model";
+import { PersonsModel } from "../Persons/person.model";
 import { connect, disconnect } from "../database/database";
 
 (async () => {

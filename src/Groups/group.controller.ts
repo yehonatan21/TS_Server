@@ -1,13 +1,21 @@
 import { connect, disconnect } from "../database/database";
 import { Response, Request } from 'express';
-import { validateQueryParams } from '../utils/validation'
-
-connect();
+import { validateQueryParams } from '../utils/group.validation'
+import { findByName, addTodb, findAll } from "./group.repo";
 
 async function create(req: Request, res: Response) {
     const data = req.query;
-    const status = validateQueryParams(Object(data))
-    res.send('created')
+    const notValid = validateQueryParams(Object(data))
+    if (notValid) {
+        res.send(notValid)
+    } else {
+        try {
+            await addTodb(data)
+            res.send('create')
+        } catch (err) {
+            res.send('Error creating')
+        }
+    }
 }
 
 async function options(req: Request, res: Response) {
@@ -16,28 +24,57 @@ async function options(req: Request, res: Response) {
 
 async function get(req: Request, res: Response) {
     const data = req.query;
-    const status = validateQueryParams(Object(data))
-    res.send('get')
+    const notValid = validateQueryParams(Object(data))
+    if (notValid) {
+        res.send(notValid)
+    } else {
+        try {
+            //...
+            const result = await findByName(String(data.name))
+            res.send(result)
+        } catch (err) {
+            res.send('Error getting')
+        } 
+    }
 }
 
 async function getAll(req: Request, res: Response) {
-    const data = req.query;
-    const status = validateQueryParams(Object(data))
-    res.send('getAll')
+    try {
+        const result = await findAll()
+        res.send(result)
+    } catch (err) {
+        res.send('Error getAll')
+    } 
 }
 
-function update(req: Request, res: Response) {
+async function update(req: Request, res: Response) {
     const data = req.query;
-    const status = validateQueryParams(Object(data))
-    res.send('updated')
+    const notValid = validateQueryParams(Object(data))
+    if (notValid) {
+        res.send(notValid)
+    } else {
+        try {
+            //...
+            res.send('update')
+        } catch (err) {
+            res.send('Error deleting')
+        } 
+    }
 }
 
-function _delete(req: Request, res: Response) {
+async function _delete(req: Request, res: Response) {
     const data = req.query;
-    const status = validateQueryParams(Object(data))
-    res.send('deleted')
+    const notValid = validateQueryParams(Object(data))
+    if (notValid) {
+        res.send(notValid)
+    } else {
+        try {
+            //...
+            res.send('delete')
+        } catch (err) {
+            res.send('Error deleting')
+        } 
+    }
 }
-
-disconnect();
 
 export { create, get, getAll, update, _delete, options }

@@ -1,11 +1,25 @@
 import { connect, disconnect } from "../database/database";
 import { Response, Request } from 'express';
-import { validateQueryParams } from '../utils/validation'
+import { validateQueryParams } from '../utils/person.validation'
+import { findByName, addTodb, findAll, deleteById } from "./person.repo";
 
-connect();
 
-function create(req: Request, res: Response) {
-    res.send(`${req.query.name} created`)
+async function create(req: Request, res: Response) {
+    const data = req.query;
+    const notValid = validateQueryParams(Object(data))
+    if (notValid) {
+        res.send(notValid)
+    } else {
+        try {
+            // await connect();
+            await addTodb(data)
+            res.send('create')
+        } catch (err) {
+            res.send('Error creating')
+        } finally {
+            // await disconnect();
+        }
+    }
 }
 
 async function options(req: Request, res: Response) {
@@ -14,28 +28,69 @@ async function options(req: Request, res: Response) {
 
 async function get(req: Request, res: Response) {
     const data = req.query;
-    const status = validateQueryParams(Object(data))
-    res.send('get')
+    const notValid = validateQueryParams(Object(data))
+    if (notValid) {
+        res.send(notValid)
+    } else {
+        try {
+            // await connect();
+            //...
+            const result = await findByName(String(data.firstName))
+            res.send(result)
+        } catch (err) {
+            res.send('Error getting')
+        } finally {
+            // await disconnect();
+        }
+    }
 }
 
 async function getAll(req: Request, res: Response) {
-    const data = req.query;
-    const status = validateQueryParams(Object(data))
-    res.send('getAll')
+    try {
+        // await connect();
+        const result = await findAll()
+        res.send(result)
+    } catch (err) {
+        res.send('Error getAll')
+    } finally {
+        // await disconnect();
+    }
 }
 
-function update(req: Request, res: Response) {
+async function update(req: Request, res: Response) {
     const data = req.query;
-    const status = validateQueryParams(Object(data))
-    res.send('update')
+    const notValid = validateQueryParams(Object(data))
+    if (notValid) {
+        res.send(notValid)
+    } else {
+        try {
+            // await connect();
+            //...
+            res.send('update')
+        } catch (err) {
+            res.send('Error deleting')
+        } finally {
+            // await disconnect();
+        }
+    }
 }
 
-function _delete(req: Request, res: Response) {
+async function _delete(req: Request, res: Response) {
     const data = req.query;
-    const status = validateQueryParams(Object(data))
-    res.send('delete')
+    const notValid = validateQueryParams(Object(data))
+    if (notValid) {
+        res.send(notValid)
+    } else {
+        try {
+            // await connect();
+            //const result = await deleteById()
+            res.send('delete')
+        } catch (err) {
+            res.send('Error deleting')
+        } finally {
+            // await disconnect();
+        }
+    }
 }
-
-disconnect()
 
 export { create, get, getAll, update, _delete, options }

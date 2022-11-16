@@ -2,10 +2,7 @@ import { Document, Model } from "mongoose";
 
 export interface IGroup {
 
-    firstName: string;
-    lastName: string;
-    age?: number;
-    email: string,
+    name: string;
     dateOfEntry?: Date;
 }
 

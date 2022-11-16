@@ -2,7 +2,8 @@ import Mongoose from 'mongoose';
 
 let database: Mongoose.Connection;
 
-export const connect = () => {
+//TODO: Error handeling
+export function connect() {
     const uri = 'mongodb://localhost:27017/storage';
 
     if (database) {
@@ -14,18 +15,19 @@ export const connect = () => {
     database.once('open', async () => {
         console.log('Connected to database successfully');
     });
-
     database.on('error', () => {
         console.log(`Error connecting to database. Check Whether mongoDB
         installed or you can try to give opensource Mongo Atlas database`);
     });
-
-    return database; 
+    return database;
 };
 
-export const disconnect = () => {
+export function disconnect() {
     if (!database) {
         return;
     }
     Mongoose.disconnect();
+    database.once('close', async () => {
+        console.log('Disconnected Successfuly');
+    });
 };
