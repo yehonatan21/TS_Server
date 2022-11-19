@@ -1,9 +1,9 @@
 import Mongoose from 'mongoose';
 
-let database: Mongoose.Connection;
+let database;
 
 //TODO: Error handeling
-export function connect() {
+export function connectToDB() {
     const uri = 'mongodb://localhost:27017/storage';
 
     if (database) {
@@ -22,7 +22,7 @@ export function connect() {
     return database;
 };
 
-export function disconnect() {
+export function disconnectFromDB() {
     if (!database) {
         return;
     }

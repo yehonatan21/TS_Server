@@ -1,8 +1,8 @@
-import { GroupModel } from "../Groups/group.model";
-import { connect, disconnect } from "../database/database";
+import { GroupModel } from "../db/repo/group/group.model";
+import { connectToDB, disconnectFromDB } from "../db/initialize";
 
 (async () => {
-	connect();
+	connectToDB();
 	// Via "sampleEmployeeData.ts" we can add data to Mongoose schema. Our schema name is persons
 	const employees = [
 		{
@@ -37,7 +37,7 @@ import { connect, disconnect } from "../database/database";
 			console.log(`Created employee ${employee.firstName} ${employee.lastName}`);
 		}
 
-		disconnect();
+		disconnectFromDB();
 	} catch (e) {
 		console.log(e);
 	}

@@ -1,4 +1,3 @@
-
 import { PersonsModel } from './person.model'
 
 export async function addTodb(data) {

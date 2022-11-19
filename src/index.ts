@@ -1,13 +1,11 @@
-import { connect, disconnect } from '../src/database/database'
-import { app, PORT } from './server'
+import { connectToDB, disconnectFromDB } from './db/initialize'
+import { startServer } from './express/server'
 
 try {
-    app.listen(PORT, () => {
-        console.log(`Server started on http://localhost:${PORT}`);
-    });
-
-    connect();
-} catch (err) {
+    connectToDB();
+    startServer()
+}
+catch (err) {
     console.log(err)
-    disconnect()
+    disconnectFromDB()
 }

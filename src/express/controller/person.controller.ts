@@ -1,8 +1,7 @@
 import { Response, Request } from 'express';
-import { findByName, addTodb, findAll, deleteById } from "./person.repo";
+import { findByName, addTodb, findAll, deleteById } from "../../db/repo/person/person.repo";
 
-
-async function create(req: Request, res: Response) {
+export async function create(req: Request, res: Response) {
     const data = req.query;
     try {
         await addTodb(data)
@@ -12,11 +11,11 @@ async function create(req: Request, res: Response) {
     }
 }
 
-async function options(req: Request, res: Response) {
+export async function options(req: Request, res: Response) {
     res.send('options: get, getAll, create, update, delete')
 }
 
-async function get(req: Request, res: Response) {
+export async function get(req: Request, res: Response) {
     const data = req.query;
     try {
         //...
@@ -27,7 +26,7 @@ async function get(req: Request, res: Response) {
     }
 }
 
-async function getAll(req: Request, res: Response) {
+export async function getAll(req: Request, res: Response) {
     try {
         const result = await findAll()
         res.send(result)
@@ -36,12 +35,10 @@ async function getAll(req: Request, res: Response) {
     }
 }
 
-async function update(req: Request, res: Response) {
+export async function update(req: Request, res: Response) {
     const data = req.query;
 }
 
-async function _delete(req: Request, res: Response) {
+export async function _delete(req: Request, res: Response) {
     const data = req.query;
 }
-
-export { create, get, getAll, update, _delete, options }

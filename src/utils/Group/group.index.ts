@@ -1,5 +1,5 @@
 import {createGroupSchema} from './create.validation'
-import { getGroupSchema } from './get.validate'
+import { getGroupSchema } from './get.validation'
 
 export {
     createGroupSchema,

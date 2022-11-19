@@ -9,8 +9,7 @@ export function Validator(validatorName) {
 
     return async function (req: Request, res: Response, next: NextFunction) {
         try {
-            const validated = await Validators[validatorName].validateAsync(req.query)
-            req.body = validated
+            await Validators[validatorName].validateAsync(req.query)
             next()
         } catch (err) {
             if (err.isJoi)
