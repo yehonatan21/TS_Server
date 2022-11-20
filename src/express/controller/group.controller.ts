@@ -1,5 +1,6 @@
 import { Response, Request } from 'express';
 import { findByName, addTodb, findAll } from "../../db/repo/group/group.repo";
+import { IGroupDocument } from '../../type/group.types';
 
 export async function create(req: Request, res: Response) {
     const data = req.query;
@@ -18,23 +19,15 @@ export async function options(req: Request, res: Response) {
 export async function get(req: Request, res: Response) {
     const data = req.query;
     try {
-        const result = await findByName(String(data.name)) //FIXME: result:IGroupDocument type
+        const result:IGroupDocument = await findByName(String(data.name))
         res.send(result)
     } catch (err) {
         res.send('Error getting')
     }
 }
 
-export async function addPersonToGroup(req: Request, res: Response) {
-    try {
-        // const result = await addPerson(req.query.name)
-        // res.send(result)
-    } catch (err) {
-        res.send('Error getAll')
-    }
-}
-
 export async function addGroupToGroup(req: Request, res: Response) {
+        //business logic
     try {
         // const result = await addPerson(req.query.name)
         // res.send(result)

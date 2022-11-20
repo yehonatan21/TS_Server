@@ -1,3 +1,4 @@
+import { IGroupDocument } from '../../../type/group.types'
 import { GroupModel } from './group.model'
 
 export async function addTodb(data) {
@@ -5,8 +6,8 @@ export async function addTodb(data) {
     console.log(data.name + ' created.')
 }
 
-export async function findByName(name: String) {
-    return await GroupModel.find({ name: name })
+export async function findByName(name: String): Promise<IGroupDocument> {
+    return await GroupModel.find({ name: name }).lean()
 }
 
 export async function findAll() {

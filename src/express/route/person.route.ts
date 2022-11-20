@@ -12,6 +12,8 @@ router.get('/getAll', controller.getAll)
 
 router.post('/create', Validator('createPersonSchema'), controller.create)
 
+router.post('/addPersontToGroup', Validator('getPersonSchema'), controller.addPersonToGroup)
+
 router.put('/update', controller.update)
 
 router.delete('/delete', controller._delete)

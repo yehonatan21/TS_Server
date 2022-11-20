@@ -5,6 +5,10 @@ const PersonsSchema = new Mongoose.Schema({
     lastName: String,
     age: Number,
     email: String,
+    groups: {
+        type: [String],
+        default: null
+    },
     dateOfJoining: {
         type: String,
         format: "date-time",

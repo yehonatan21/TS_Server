@@ -1,5 +1,6 @@
 import { Response, Request } from 'express';
-import { findByName, addTodb, findAll, deleteById } from "../../db/repo/person/person.repo";
+import { findByName, addTodb, findAll, deleteById, addToGroup } from "../../db/repo/person/person.repo";
+import { checkIfExistInGroup } from '../service/person.service';
 
 export async function create(req: Request, res: Response) {
     const data = req.query;
@@ -32,6 +33,21 @@ export async function getAll(req: Request, res: Response) {
         res.send(result)
     } catch (err) {
         res.send('Error getAll')
+    }
+}
+
+export async function addPersonToGroup(req: Request, res: Response) {
+    const existInGroup: Boolean = await checkIfExistInGroup(req.query)
+    if (existInGroup) {
+        res.send('Person exist in group')
+    } else {
+        try {
+            const result = await addToGroup(req.query.firstName)
+            res.send(result)
+        } catch (err) {
+            console.log(err.message);
+            res.send('Error add person to group');
+        }
     }
 }
 

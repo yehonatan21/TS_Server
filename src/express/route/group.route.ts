@@ -12,8 +12,6 @@ router.get('/getAll', controller.getAll)
 
 router.post('/create', Validator('createGroupSchema'), controller.create)
 
-router.post('/addPersontToGroup', Validator('getGroupSchema'), controller.addPersonToGroup)
-
 router.post('/addGroupToGroup', Validator('getGroupSchema'), controller.addGroupToGroup)
 
 router.put('/update', controller.update)
