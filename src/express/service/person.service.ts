@@ -1,9 +1,8 @@
-import { findByName, addTodb, findAll, deleteById, getGroupsByName } from "../../db/repo/person/person.repo";
+import { findByName, addTodb, findAll, deleteById } from "../../db/repo/person/person.repo";
 
-export async function checkIfExistInGroup(data): Promise<Boolean> {
-    const name = data.firstName
-    const person: [String] = await getGroupsByName(name)
-    if (person.includes('abc')) { //FIXME: groupName
+export async function checkIfExistInGroup(personName: string, groupName: string): Promise<Boolean> {
+    const person = await findByName(personName)
+    if (person.groups.includes(groupName)) {
         return true
     } else {
         return false

@@ -1,6 +1,6 @@
 import Mongoose from 'mongoose';
 
-let database;
+let database: Mongoose.Connection;
 
 //TODO: Error handeling
 export function connectToDB() {

@@ -5,7 +5,7 @@ export interface IPerson {
     lastName: string;
     age: number;
     email: string,
-    groups: [String],
+    groups: [string],
     dateOfEntry?: Date;
 }
 

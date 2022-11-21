@@ -37,12 +37,15 @@ export async function getAll(req: Request, res: Response) {
 }
 
 export async function addPersonToGroup(req: Request, res: Response) {
-    const existInGroup: Boolean = await checkIfExistInGroup(req.query)
+    const personName: string = req.body.personName
+    const GroupName: string = req.body.groupName
+
+    const existInGroup: Boolean = await checkIfExistInGroup(personName, GroupName)
     if (existInGroup) {
         res.send('Person exist in group')
     } else {
         try {
-            const result = await addToGroup(req.query.firstName)
+            const result = await addToGroup(personName, GroupName)
             res.send(result)
         } catch (err) {
             console.log(err.message);
@@ -52,9 +55,9 @@ export async function addPersonToGroup(req: Request, res: Response) {
 }
 
 export async function update(req: Request, res: Response) {
-    const data = req.query;
+    const data = req.body;
 }
 
 export async function _delete(req: Request, res: Response) {
-    const data = req.query;
+    const data = req.body;
 }
