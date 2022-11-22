@@ -8,3 +8,11 @@ export async function checkIfExistInGroup(personName: string, groupName: string)
         return false
     }
 }
+
+export function createObject(key, value){
+    const obj: any = {};
+
+    obj[key] = value;
+    // console.log(obj)
+    return obj
+}

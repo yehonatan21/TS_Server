@@ -14,10 +14,10 @@ router.post('/create', Validator('createPersonSchema', 'query'), controller.crea
 
 router.put('/addPersontToGroup', Validator('addPersonToGroupSchema', 'body'), controller.addPersonToGroup)
 
-router.put('/update', controller.update)
+router.put('/update', Validator('updatePersonSchema', 'body'), controller.update)
 
 router.delete('/deletePerson', controller._delete)
 
-router.delete('/deletePersonFromGroup', controller._delete)
+router.delete('/deletePersonFromGroup', controller._delete) 
 
 export default router;

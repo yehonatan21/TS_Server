@@ -21,7 +21,8 @@ export function Validator(validatorName, param: string) {
             }
         } catch (err) {
             if (err.isJoi)
-                return next(createHttpError(422, { message: err.message }))
+                return next(createHttpError(422, `${validatorName} - ${err.message}`))
+                // return next(`${validatorName} - ${err.message}`)
             next(createHttpError(500))
         }
     }

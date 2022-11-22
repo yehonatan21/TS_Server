@@ -1,6 +1,6 @@
 import { Response, Request } from 'express';
-import { findByName, addTodb, findAll, deleteById, addToGroup } from "../../db/repo/person/person.repo";
-import { checkIfExistInGroup } from '../service/person.service';
+import { findByName, addTodb, findAll, updateByName, deleteByName, addToGroup } from "../../db/repo/person/person.repo";
+import { checkIfExistInGroup, createObject } from '../service/person.service';
 
 export async function create(req: Request, res: Response) {
     const data = req.query;
@@ -19,9 +19,12 @@ export async function options(req: Request, res: Response) {
 export async function get(req: Request, res: Response) {
     const data = req.query;
     try {
-        //...
         const result = await findByName(String(data.firstName))
-        res.send(result)
+        if (result === null) {
+            res.send('Cant find that person')
+        } else {
+            res.send(result)
+        }
     } catch (err) {
         res.send('Error getting')
     }
@@ -55,9 +58,18 @@ export async function addPersonToGroup(req: Request, res: Response) {
 }
 
 export async function update(req: Request, res: Response) {
-    const data = req.body;
+    const personToUpdate = createObject('firstName', req.body.personName)
+    const updateFiled = createObject(req.body.updateFiled, req.body.value)
+    try {
+        await updateByName(personToUpdate, updateFiled)
+    } catch (err) {
+        console.log(err.message);
+        res.send('updating error');
+    }
+    res.send('updated')
 }
 
 export async function _delete(req: Request, res: Response) {
+
     const data = req.body;
 }

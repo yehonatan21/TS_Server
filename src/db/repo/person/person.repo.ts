@@ -1,4 +1,4 @@
-import { IPersonDocument, IPersonModel } from '../../../type/person.types'
+import { IPersonDocument } from '../../../type/person.types'
 import { PersonsModel } from './person.model'
 import { addPersonToGroup } from '../group/group.repo'
 
@@ -15,24 +15,25 @@ export async function findAll() {
     return await PersonsModel.find({})
 }
 
-export async function deleteById(id: string) {
+export async function deleteByName(id: string) {
 
 }
 
 export async function addToGroup(personName: string, groupName: string) {
     const personID = await (await findByName(personName))._id
     const groupExist = await addPersonToGroup(personID, groupName)
-    
+
     if (groupExist) {
-        return await PersonsModel.updateOne(
+        await PersonsModel.updateOne(
             { firstName: personName },
             { $push: { groups: groupName } },
         );
+        return `${personName} added to ${groupName}`
     } else {
         return 'Group not exist'
     }
 }
 
-export async function update(id: String, updateFiled,) {
-
+export async function updateByName(filter: object, update: object) {
+    return await PersonsModel.findOneAndUpdate(filter, update)
 }

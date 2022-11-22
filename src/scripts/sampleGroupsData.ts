@@ -20,7 +20,7 @@ import { connectToDB, disconnectFromDB } from "../db/initialize";
 		}
 
 		disconnectFromDB();
-	} catch (e) {
-		console.log(e);
+	} catch (err) {
+		console.log(err.message);
 	}
 })();
