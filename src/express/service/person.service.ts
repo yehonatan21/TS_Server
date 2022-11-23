@@ -1,4 +1,4 @@
-import { findByName, addTodb, findAll, deleteById } from "../../db/repo/person/person.repo";
+import { findByName } from "../../db/repo/person/person.repo";
 
 export async function checkIfExistInGroup(personName: string, groupName: string): Promise<Boolean> {
     const person = await findByName(personName)
@@ -9,10 +9,9 @@ export async function checkIfExistInGroup(personName: string, groupName: string)
     }
 }
 
-export function createObject(key, value){
+export function createObject(key: string, value: string) {
     const obj: any = {};
-
     obj[key] = value;
-    // console.log(obj)
+    
     return obj
 }

@@ -1,5 +1,5 @@
 import { Response, Request } from 'express';
-import { findByName, addTodb, findAll, updateByName, deleteByName, addToGroup } from "../../db/repo/person/person.repo";
+import { findByName, addTodb, findAll, updateByName, deleteByName, addToGroup, removeFromGroup } from "../../db/repo/person/person.repo";
 import { checkIfExistInGroup, createObject } from '../service/person.service';
 
 export async function create(req: Request, res: Response) {
@@ -41,19 +41,37 @@ export async function getAll(req: Request, res: Response) {
 
 export async function addPersonToGroup(req: Request, res: Response) {
     const personName: string = req.body.personName
-    const GroupName: string = req.body.groupName
+    const groupName: string = req.body.groupName
 
-    const existInGroup: Boolean = await checkIfExistInGroup(personName, GroupName)
+    const existInGroup: Boolean = await checkIfExistInGroup(personName, groupName)
     if (existInGroup) {
         res.send('Person exist in group')
     } else {
         try {
-            const result = await addToGroup(personName, GroupName)
+            const result = await addToGroup(personName, groupName)
             res.send(result)
         } catch (err) {
             console.log(err.message);
             res.send('Error add person to group');
         }
+    }
+}
+
+export async function removePersonFromGroup(req: Request, res: Response) {
+    const personName: string = req.body.personName
+    const groupName: string = req.body.groupName
+
+    const existInGroup: Boolean = await checkIfExistInGroup(personName, groupName)
+    if (existInGroup) {
+        try {
+            const result = await removeFromGroup(personName, groupName)
+            res.send(result)
+        } catch (err) {
+            console.log(err.message);
+            res.send('Error remove person to group');
+        }
+    } else {
+        res.send('Person not exist in group')
     }
 }
 
@@ -70,6 +88,13 @@ export async function update(req: Request, res: Response) {
 }
 
 export async function _delete(req: Request, res: Response) {
-
+    const personName = createObject('firstName', req.body.firstName)
+    try {
+        await deleteByName(personName)
+    } catch (err) {
+        console.log(err.message);
+        res.send('deleting error');
+    }
+    res.send('deleted')
     const data = req.body;
 }

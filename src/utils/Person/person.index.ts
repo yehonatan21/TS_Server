@@ -8,5 +8,4 @@ export {
     getPersonSchema,
     addPersonToGroupSchema,
     updatePersonSchema,
-    //deletePersonSchema'
 }

@@ -11,7 +11,7 @@ export async function findByName(name: String): Promise<IGroupDocument> {
 }
 
 export async function findAll() {
-    return await GroupModel.find({})
+    return await GroupModel.find()
 }
 
 export async function addPersonToGroup(personId: string, groupName: string) {
@@ -22,6 +22,18 @@ export async function addPersonToGroup(personId: string, groupName: string) {
         return await GroupModel.updateOne(
             { name: groupName },
             { $push: { persons: personId } },
+        );
+    }
+}
+
+export async function removePersonFromGroup(personId: string, groupName: string) {
+    const GroupExist = await findByName(groupName)
+    if (!GroupExist) {
+        return GroupExist
+    } else {
+        return await GroupModel.updateOne(
+            { name: groupName },
+            { $pull: { persons: personId } },
         );
     }
 }

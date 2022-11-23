@@ -5,9 +5,7 @@ import { connectToDB, disconnectFromDB } from "../db/initialize";
 	connectToDB();
 	const groups = [
 		{
-			name: "Freinds",
-			age: 25,
-			email: "a@gmail.com",
+			name: "test",
 			groups: [],
 			persons: []
 		}
