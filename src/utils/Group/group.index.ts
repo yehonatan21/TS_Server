@@ -1,9 +1,10 @@
-import {createGroupSchema} from './create.validation'
+import { createGroupSchema } from './create.validation'
 import { getGroupSchema } from './get.validation'
+import { updateGroupSchema } from './update.validation'
 
 export {
     createGroupSchema,
     getGroupSchema,
-    //updatePersonSchema,
+    updateGroupSchema,
     //deletePersonSchema'
 }

@@ -1,38 +1,30 @@
 import { Response, Request } from 'express';
-import { findByName, addTodb, findAll } from "../../db/repo/group/group.repo";
+import { ParsedQs } from 'qs';
+import { findByName, createGroup, findAll, updateByName, deleteByName } from "../../db/repo/group/group.repo";
 import { IGroupDocument } from '../../type/group.types';
-
-export async function create(req: Request, res: Response) {
-    const data = req.query;
-    try {
-        await addTodb(data)
-        res.send('create')
-    } catch (err) {
-        res.send('Error creating')
-    }
-}
+import { createObject } from '../service/person.service';
 
 export async function options(req: Request, res: Response) {
     res.send('options: get, getAll, create, update, delete')
 }
 
-export async function get(req: Request, res: Response) {
-    const data = req.query;
+export async function create(req: Request, res: Response) {
+    const data: ParsedQs = req.query;
     try {
-        const result:IGroupDocument = await findByName(String(data.name))
-        res.send(result)
+        await createGroup(data)
+        res.send(`${data.name} created`)
     } catch (err) {
-        res.send('Error getting')
+        res.send('Error creating')
     }
 }
 
-export async function addGroupToGroup(req: Request, res: Response) {
-        //business logic
+export async function get(req: Request, res: Response) {
+    const groupName = req.query.groupName;
     try {
-        // const result = await addPerson(req.query.name)
-        // res.send(result)
+        const result: IGroupDocument = await findByName(String(groupName))
+        res.send(result)
     } catch (err) {
-        res.send('Error getAll')
+        res.send('Error getting')
     }
 }
 
@@ -46,9 +38,35 @@ export async function getAll(req: Request, res: Response) {
 }
 
 export async function update(req: Request, res: Response) {
-    const data = req.query;
+    const groupToUpdate = createObject('name', req.body.groupName)
+    const updateFiled = createObject(req.body.updateFiled, req.body.value)
+
+    try {
+        await updateByName(groupToUpdate, updateFiled)
+    } catch (err) {
+        console.log(err.message);
+        res.send('updating error');
+    }
+    res.send('updated')
 }
 
 export async function _delete(req: Request, res: Response) {
-    const data = req.query;
+    // const groupName = createObject('name', req.body.groupName)
+    const groupName = req.body.groupName
+
+    try {
+        await deleteByName(groupName)
+        res.send('deleted')
+    } catch (err) {
+        console.log(err.message);
+        res.send('deleting error');
+    }
+}
+
+export async function addGroupToGroup(req: Request, res: Response) {
+    try {
+
+    } catch (err) {
+        res.send('Error getAll')
+    }
 }

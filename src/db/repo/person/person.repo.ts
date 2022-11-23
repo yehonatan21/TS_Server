@@ -1,8 +1,9 @@
 import { IPersonDocument } from '../../../type/person.types'
 import { PersonsModel } from './person.model'
 import { addPersonToGroup, removePersonFromGroup } from '../group/group.repo'
+import { ParsedQs } from 'qs'
 
-export async function addTodb(data) {
+export async function createPerson(data: ParsedQs) {
     await PersonsModel.create(data)
     console.log(data.firstName + ' created.')
 }

@@ -6,15 +6,15 @@ const router: Router = Router();
 
 router.get('/', controller.options);
 
-router.get('/get', Validator('getGroupSchema'), controller.get)
+router.get('/get', Validator('getGroupSchema', 'query'), controller.get)
 
 router.get('/getAll', controller.getAll)
 
-router.post('/create', Validator('createGroupSchema'), controller.create)
+router.post('/create', Validator('createGroupSchema', 'body'), controller.create)
 
-router.post('/addGroupToGroup', Validator('getGroupSchema'), controller.addGroupToGroup)
+router.put('/addGroupToGroup', Validator('getGroupSchema', 'body'), controller.addGroupToGroup)
 
-router.put('/update', controller.update)
+router.put('/update', Validator('updateGroupSchema', 'body'), controller.update)
 
-router.delete('/delete', controller._delete)
+router.delete('/delete', Validator('getGroupSchema', 'body'), controller._delete)
 export default router;

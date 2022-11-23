@@ -1,19 +1,19 @@
 import { Response, Request } from 'express';
-import { findByName, addTodb, findAll, updateByName, deleteByName, addToGroup, removeFromGroup } from "../../db/repo/person/person.repo";
+import { findByName, createPerson, findAll, updateByName, deleteByName, addToGroup, removeFromGroup } from "../../db/repo/person/person.repo";
 import { checkIfExistInGroup, createObject } from '../service/person.service';
+
+export async function options(req: Request, res: Response) {
+    res.send('options: get, getAll, create, update, delete')
+}
 
 export async function create(req: Request, res: Response) {
     const data = req.query;
     try {
-        await addTodb(data)
+        await createPerson(data)
         res.send('create')
     } catch (err) {
         res.send('Error creating')
     }
-}
-
-export async function options(req: Request, res: Response) {
-    res.send('options: get, getAll, create, update, delete')
 }
 
 export async function get(req: Request, res: Response) {
@@ -39,7 +39,7 @@ export async function getAll(req: Request, res: Response) {
     }
 }
 
-export async function addPersonToGroup(req: Request, res: Response) {
+export async function addPersonToGroup(req: Request, res: Response) { //BUG: add group record. not name.
     const personName: string = req.body.personName
     const groupName: string = req.body.groupName
 
