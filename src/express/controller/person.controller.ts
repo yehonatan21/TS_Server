@@ -17,9 +17,9 @@ export async function create(req: Request, res: Response) {
 }
 
 export async function get(req: Request, res: Response) {
-    const data = req.query;
+    const name = req.params.firstName;
     try {
-        const result = await findByName(String(data.firstName))
+        const result = await findByName(name)
         if (result === null) {
             res.send('Cant find that person')
         } else {
@@ -40,8 +40,8 @@ export async function getAll(req: Request, res: Response) {
 }
 
 export async function addPersonToGroup(req: Request, res: Response) { //BUG: add group record. not name.
-    const personName: string = req.body.personName
-    const groupName: string = req.body.groupName
+    const personName: string = req.params.personName
+    const groupName: string = req.params.groupName
 
     const existInGroup: Boolean = await checkIfExistInGroup(personName, groupName)
     if (existInGroup) {
@@ -58,8 +58,8 @@ export async function addPersonToGroup(req: Request, res: Response) { //BUG: add
 }
 
 export async function removePersonFromGroup(req: Request, res: Response) {
-    const personName: string = req.body.personName
-    const groupName: string = req.body.groupName
+    const personName: string = req.params.personName
+    const groupName: string = req.params.groupName
 
     const existInGroup: Boolean = await checkIfExistInGroup(personName, groupName)
     if (existInGroup) {
@@ -76,8 +76,11 @@ export async function removePersonFromGroup(req: Request, res: Response) {
 }
 
 export async function update(req: Request, res: Response) {
-    const personToUpdate = createObject('firstName', req.body.personName)
-    const updateFiled = createObject(req.body.updateFiled, req.body.value)
+    const personToUpdate = createObject('firstName', req.params.personName)
+    const updateFiled = createObject(req.params.updateFiled, req.params.value)
+    console.log(personToUpdate)
+    console.log(updateFiled)
+
     try {
         await updateByName(personToUpdate, updateFiled)
     } catch (err) {
@@ -88,7 +91,7 @@ export async function update(req: Request, res: Response) {
 }
 
 export async function _delete(req: Request, res: Response) {
-    const personName = createObject('firstName', req.body.firstName)
+    const personName = createObject('firstName', req.params.firstName)
     try {
         await deleteByName(personName)
     } catch (err) {

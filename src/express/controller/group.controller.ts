@@ -19,7 +19,7 @@ export async function create(req: Request, res: Response) {
 }
 
 export async function get(req: Request, res: Response) {
-    const groupName = req.query.groupName;
+    const groupName = req.params.groupName;
     try {
         const result: IGroupDocument = await findByName(String(groupName))
         res.send(result)
@@ -38,9 +38,9 @@ export async function getAll(req: Request, res: Response) {
 }
 
 export async function update(req: Request, res: Response) {
-    const groupToUpdate = createObject('name', req.body.groupName)
-    const updateFiled = createObject(req.body.updateFiled, req.body.value)
-
+    const groupToUpdate = createObject('name', req.params.groupName)
+    const updateFiled = createObject(req.params.updateFiled, req.params.value)
+    
     try {
         await updateByName(groupToUpdate, updateFiled)
     } catch (err) {
@@ -52,7 +52,7 @@ export async function update(req: Request, res: Response) {
 
 export async function _delete(req: Request, res: Response) {
     // const groupName = createObject('name', req.body.groupName)
-    const groupName = req.body.groupName
+    const groupName = req.params.groupName
 
     try {
         await deleteByName(groupName)

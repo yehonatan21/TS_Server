@@ -1,23 +1,23 @@
-import { query, Router } from 'express';
+import { Router } from 'express';
 import * as controller from '../controller/person.controller';
-import { Validator } from '../../utils/Person/person.validator'
+import { Validator } from '../../utils/Joi/Person/person.validator'
 
 const router: Router = Router();
 
 router.get('/', controller.options);
 
-router.get('/get', Validator('getPersonSchema', 'qurey'), controller.get)
+router.get('/get/:firstName', controller.get)
 
 router.get('/getAll', controller.getAll)
 
-router.post('/create', Validator('createPersonSchema', 'query'), controller.create)
+router.post('/create', Validator('createPersonSchema'), controller.create)
 
-router.put('/addPersonToGroup', Validator('addPersonToGroupSchema', 'body'), controller.addPersonToGroup)
+router.put('/addPersonToGroup/:personName/:groupName', controller.addPersonToGroup)
 
-router.put('/update', Validator('updatePersonSchema', 'body'), controller.update)
+router.put('/update/:personName/:updateFiled/:value', controller.update)
 
-router.delete('/deletePerson', Validator('getPersonSchema', 'body'), controller._delete)
+router.delete('/delete/:firstName', controller._delete)
 
-router.delete('/deletePersonFromGroup', Validator('addPersonToGroupSchema', 'body'), controller.removePersonFromGroup)
+router.delete('/deletePersonFromGroup/:personName/:groupName', controller.removePersonFromGroup)
 
 export default router;
