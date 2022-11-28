@@ -76,10 +76,8 @@ export async function removePersonFromGroup(req: Request, res: Response) {
 }
 
 export async function update(req: Request, res: Response) {
-    const personToUpdate = createObject('firstName', req.params.personName)
-    const updateFiled = createObject(req.params.updateFiled, req.params.value)
-    console.log(personToUpdate)
-    console.log(updateFiled)
+    const personToUpdate = createObject('firstName', req.body.personName)
+    const updateFiled = createObject(req.body.updateFiled, req.body.value)
 
     try {
         await updateByName(personToUpdate, updateFiled)

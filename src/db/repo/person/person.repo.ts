@@ -51,5 +51,5 @@ export async function removeFromGroup(personName: string, groupName: string) {
 }
 
 export async function updateByName(filter: object, update: object) {
-    return await PersonsModel.findOneAndUpdate(filter, update)
+    return await PersonsModel.updateOne(filter, update)
 }

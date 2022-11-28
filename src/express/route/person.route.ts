@@ -14,7 +14,7 @@ router.post('/create', Validator('createPersonSchema'), controller.create)
 
 router.put('/addPersonToGroup/:personName/:groupName', controller.addPersonToGroup)
 
-router.put('/update/:personName/:updateFiled/:value', controller.update)
+router.post('/update', Validator('updatePersonSchema'), controller.update)
 
 router.delete('/delete/:firstName', controller._delete)
 

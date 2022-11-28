@@ -38,9 +38,9 @@ export async function getAll(req: Request, res: Response) {
 }
 
 export async function update(req: Request, res: Response) {
-    const groupToUpdate = createObject('name', req.params.groupName)
-    const updateFiled = createObject(req.params.updateFiled, req.params.value)
-    
+    const groupToUpdate = createObject('groupName', req.body.groupName)
+    const updateFiled = createObject(req.body.updateFiled, req.body.value)
+
     try {
         await updateByName(groupToUpdate, updateFiled)
     } catch (err) {

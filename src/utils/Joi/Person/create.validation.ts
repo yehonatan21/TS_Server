@@ -6,3 +6,5 @@ export const createPersonSchema = Joi.object({
     email: Joi.string().email().required(),
     age: Joi.number().positive().required()
 })
+
+export const personParams = ['firstName', 'lastName', 'email', 'age']

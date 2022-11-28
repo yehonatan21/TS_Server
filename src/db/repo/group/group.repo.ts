@@ -49,5 +49,7 @@ export async function deleteByName(groupName: string) {
 }
 
 export async function updateByName(filter: object, update: object) {
+    console.log(filter)
+    console.log(update)
     return await GroupModel.updateOne(filter, update)
 }
