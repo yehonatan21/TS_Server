@@ -1,8 +1,7 @@
-import { ParsedQs } from 'qs'
 import { IGroupDocument } from '../../../type/group.types'
 import { GroupModel } from './group.model'
 
-export async function createGroup(data: ParsedQs) {
+export async function createGroup(data) {
     await GroupModel.create(data)
     console.log(data.name + ' created.')
 }
@@ -25,6 +24,13 @@ export async function addPersonToGroup(personId: string, groupName: string) {
             { $push: { persons: personId } },
         );
     }
+}
+
+export async function addGroupToGroupDB(mainGroup: string, groupToAddId: string) {
+    return await GroupModel.updateOne(
+        { name: mainGroup },
+        { $push: { groups: groupToAddId } },
+    );
 }
 
 export async function removePersonFromGroup(personId: string, groupName: string) {

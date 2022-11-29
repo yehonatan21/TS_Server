@@ -1,7 +1,7 @@
 import { Response, Request } from 'express';
-import { ParsedQs } from 'qs';
-import { findByName, createGroup, findAll, updateByName, deleteByName } from "../../db/repo/group/group.repo";
+import { findByName, createGroup, findAll, updateByName, deleteByName, addGroupToGroupDB } from "../../db/repo/group/group.repo";
 import { IGroupDocument } from '../../type/group.types';
+import { ifGroupNotInGroup, ifGroupNotIsPrototype, ifGroupNotItself } from '../service/group.service';
 import { createObject } from '../service/person.service';
 
 export async function options(req: Request, res: Response) {
@@ -9,7 +9,7 @@ export async function options(req: Request, res: Response) {
 }
 
 export async function create(req: Request, res: Response) {
-    const data: ParsedQs = req.query;
+    const data = req.query;
     try {
         await createGroup(data)
         res.send(`${data.name} created`)
@@ -51,7 +51,6 @@ export async function update(req: Request, res: Response) {
 }
 
 export async function _delete(req: Request, res: Response) {
-    // const groupName = createObject('name', req.body.groupName)
     const groupName = req.params.groupName
 
     try {
@@ -64,9 +63,26 @@ export async function _delete(req: Request, res: Response) {
 }
 
 export async function addGroupToGroup(req: Request, res: Response) {
-    try {
+    const mainGroup = req.params.mainGroup
+    const groupToAdd = req.params.groupToAdd
 
+    try {
+        const mainGroupDoc = await findByName(mainGroup)
+        const groupToAddDoc = await findByName(groupToAdd)
+
+        if (
+            mainGroupDoc &&
+            groupToAddDoc &&
+            ifGroupNotInGroup(mainGroupDoc, groupToAddDoc) &&
+            ifGroupNotItself(String(mainGroupDoc._id), String(groupToAddDoc._id)) &&
+            ifGroupNotIsPrototype(mainGroupDoc, groupToAddDoc)
+        ) {
+            addGroupToGroupDB(mainGroupDoc.name, groupToAddDoc._id)
+            res.send('Add Group')
+        } else {
+            res.send('Groups not exist')
+        }
     } catch (err) {
-        res.send('Error getAll')
+        res.send('Error ADD group To group')
     }
 }

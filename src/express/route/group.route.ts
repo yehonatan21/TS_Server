@@ -12,9 +12,9 @@ router.get('/getAll', controller.getAll)
 
 router.post('/create', Validator('createGroupSchema'), controller.create)
 
-// router.put('/addGroupToGroup', Validator('getGroupSchema', 'body'), controller.addGroupToGroup)
-
 router.post('/update', Validator('updateGroupSchema'), controller.update)
+
+router.put('/addGroupToGroup/:mainGroup/:groupToAdd', controller.addGroupToGroup)
 
 router.delete('/delete/:groupName', controller._delete)
 

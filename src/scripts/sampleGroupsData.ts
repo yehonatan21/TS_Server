@@ -13,6 +13,16 @@ import { connectToDB, disconnectFromDB } from "../db/initialize";
 			name: "you",
 			groups: [],
 			persons: []
+		},
+		{
+			name: "Friends",
+			groups: [],
+			persons: []
+		},
+		{
+			name: "Games",
+			groups: [],
+			persons: []
 		}
 	];
 
