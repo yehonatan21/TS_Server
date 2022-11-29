@@ -1,5 +1,5 @@
 import { Response, Request } from 'express';
-import { findByName, createPerson, findAll, updateByName, deleteByName, addToGroup, removeFromGroup } from "../../db/repo/person/person.repo";
+import { findPersonByName, createPerson, findAll, updateByName, deleteByName, addToGroup, removeFromGroup } from "../../db/repo/person/person.repo";
 import { checkIfExistInGroup, createObject } from '../service/person.service';
 
 export async function options(req: Request, res: Response) {
@@ -19,7 +19,7 @@ export async function create(req: Request, res: Response) {
 export async function get(req: Request, res: Response) {
     const name = req.params.firstName;
     try {
-        const result = await findByName(name)
+        const result = await findPersonByName(name)
         if (result === null) {
             res.send('Cant find that person')
         } else {
@@ -39,7 +39,7 @@ export async function getAll(req: Request, res: Response) {
     }
 }
 
-export async function addPersonToGroup(req: Request, res: Response) { //BUG: add group record. not name.
+export async function addPersonToGroup(req: Request, res: Response) {
     const personName: string = req.params.personName
     const groupName: string = req.params.groupName
 

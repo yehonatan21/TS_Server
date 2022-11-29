@@ -1,13 +1,13 @@
 import { IPersonDocument } from '../../../type/person.types'
 import { PersonsModel } from './person.model'
-import { addPersonToGroup, removePersonFromGroup } from '../group/group.repo'
+import { addPersonToGroup, findGroupByName, removePersonFromGroup } from '../group/group.repo'
 
 export async function createPerson(data) {
     await PersonsModel.create(data)
     console.log(data.firstName + ' created.')
 }
 
-export async function findByName(name: String): Promise<IPersonDocument> {
+export async function findPersonByName(name: String): Promise<IPersonDocument> {
     return await PersonsModel.findOne({ firstName: name }).lean()
 }
 
@@ -20,22 +20,23 @@ export async function deleteByName(name: object) {
 }
 
 export async function addToGroup(personName: string, groupName: string) {
-    const personID = await (await findByName(personName))._id
-    const groupExist = await addPersonToGroup(personID, groupName)
+    const personID = await (await findPersonByName(personName))._id
+    const groupID = await (await findGroupByName(groupName))._id
+    const groupExist = await addPersonToGroup(personID, groupID)
 
     if (groupExist) {
         await PersonsModel.updateOne(
-            { firstName: personName },
-            { $push: { groups: groupName } },
+            { _id: personID },
+            { $push: { groups: groupID } },
         );
-        return `${personName} added to ${groupName}`
+        return `${personName} added to group ${groupName}`
     } else {
         return 'Group not exist'
     }
 }
 
 export async function removeFromGroup(personName: string, groupName: string) {
-    const personID = await (await findByName(personName))._id
+    const personID = await (await findPersonByName(personName))._id
     const groupExist = await removePersonFromGroup(personID, groupName)
 
     if (groupExist) {

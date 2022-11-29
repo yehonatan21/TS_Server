@@ -6,7 +6,7 @@ export async function createGroup(data) {
     console.log(data.name + ' created.')
 }
 
-export async function findByName(name: String): Promise<IGroupDocument> {
+export async function findGroupByName(name: String): Promise<IGroupDocument> {
     return await GroupModel.findOne({ name: name }).lean()
 }
 
@@ -14,13 +14,19 @@ export async function findAll() {
     return await GroupModel.find()
 }
 
-export async function addPersonToGroup(personId: string, groupName: string) {
-    const ifGroupExist = await findByName(groupName)
+export async function findGroupById(groupID: string) {
+    return await GroupModel.findOne({ _id: groupID }).lean()
+}
+
+export async function addPersonToGroup(personId: string, groupId: string) {
+    // const ifGroupExist = await findGroupByName(groupName)
+    const ifGroupExist = await findGroupById(groupId)
+
     if (!ifGroupExist) {
         return ifGroupExist
     } else {
         return await GroupModel.updateOne(
-            { name: groupName },
+            { _id: groupId },
             { $push: { persons: personId } },
         );
     }
@@ -34,7 +40,7 @@ export async function addGroupToGroupDB(mainGroup: string, groupToAddId: string)
 }
 
 export async function removePersonFromGroup(personId: string, groupName: string) {
-    const GroupExist = await findByName(groupName)
+    const GroupExist = await findGroupByName(groupName)
     if (!GroupExist) {
         return GroupExist
     } else {
@@ -45,17 +51,21 @@ export async function removePersonFromGroup(personId: string, groupName: string)
     }
 }
 
+export async function updateByName(filter: object, update: object) {
+    return await GroupModel.updateOne(filter, update)
+}
+
 export async function deleteByName(groupName: string) {
-    const groups = (await findByName(groupName)).groups
+    const groups = (await findGroupByName(groupName)).groups
     for (const group of groups) {
         await GroupModel.deleteOne({ name: group })
-        console.log(group)
     }
     return await GroupModel.deleteOne({ name: groupName })
 }
 
-export async function updateByName(filter: object, update: object) {
-    console.log(filter)
-    console.log(update)
-    return await GroupModel.updateOne(filter, update)
+export async function deleteGroupsArray(groupsID: string[]) {
+    await GroupModel.deleteMany(
+        {
+            _id: { $in: groupsID },
+        })
 }

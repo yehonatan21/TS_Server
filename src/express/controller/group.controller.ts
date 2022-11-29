@@ -1,5 +1,5 @@
 import { Response, Request } from 'express';
-import { findByName, createGroup, findAll, updateByName, deleteByName, addGroupToGroupDB } from "../../db/repo/group/group.repo";
+import { findGroupByName, createGroup, findAll, updateByName, deleteByName, addGroupToGroupDB, deleteGroupsArray } from "../../db/repo/group/group.repo";
 import { IGroupDocument } from '../../type/group.types';
 import { ifGroupNotInGroup, ifGroupNotIsPrototype, ifGroupNotItself } from '../service/group.service';
 import { createObject } from '../service/person.service';
@@ -21,7 +21,7 @@ export async function create(req: Request, res: Response) {
 export async function get(req: Request, res: Response) {
     const groupName = req.params.groupName;
     try {
-        const result: IGroupDocument = await findByName(String(groupName))
+        const result: IGroupDocument = await findGroupByName(String(groupName))
         res.send(result)
     } catch (err) {
         res.send('Error getting')
@@ -54,6 +54,8 @@ export async function _delete(req: Request, res: Response) {
     const groupName = req.params.groupName
 
     try {
+        const groupDoc = await findGroupByName(groupName)
+        await deleteGroupsArray(groupDoc.groups)
         await deleteByName(groupName)
         res.send('deleted')
     } catch (err) {
@@ -67,8 +69,8 @@ export async function addGroupToGroup(req: Request, res: Response) {
     const groupToAdd = req.params.groupToAdd
 
     try {
-        const mainGroupDoc = await findByName(mainGroup)
-        const groupToAddDoc = await findByName(groupToAdd)
+        const mainGroupDoc = await findGroupByName(mainGroup)
+        const groupToAddDoc = await findGroupByName(groupToAdd)
 
         if (
             mainGroupDoc &&

@@ -1,7 +1,7 @@
-import { findByName } from "../../db/repo/person/person.repo";
+import { findPersonByName } from "../../db/repo/person/person.repo";
 
 export async function checkIfExistInGroup(personName: string, groupName: string): Promise<Boolean> {
-    const person = await findByName(personName)
+    const person = await findPersonByName(personName)
     if (person.groups.includes(groupName)) {
         return true
     } else {
