@@ -1,7 +1,7 @@
 import { Document, Model } from "mongoose";
 
 export interface IGroup {
-    name: string;
+    groupName: string;
     groups: string[],
     persons: string[],
     dateOfEntry?: Date;

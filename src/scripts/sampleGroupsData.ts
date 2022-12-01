@@ -5,22 +5,22 @@ import { connectToDB, disconnectFromDB } from "../db/initialize";
 	connectToDB();
 	const groups = [
 		{
-			name: "me",
+			groupName: "me",
 			groups: [],
 			persons: []
 		},
 		{
-			name: "you",
+			groupName: "you",
 			groups: [],
 			persons: []
 		},
 		{
-			name: "Friends",
+			groupName: "Friends",
 			groups: [],
 			persons: []
 		},
 		{
-			name: "Games",
+			groupName: "Games",
 			groups: [],
 			persons: []
 		}
@@ -29,7 +29,7 @@ import { connectToDB, disconnectFromDB } from "../db/initialize";
 	try {
 		for (const group of groups) {
 			await GroupModel.create(group);
-			console.log(`Created Group ${group.name}`);
+			console.log(`Created Group ${group.groupName}`);
 		}
 
 		disconnectFromDB();

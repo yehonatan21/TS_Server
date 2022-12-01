@@ -1,6 +1,7 @@
 import { IPersonDocument } from '../../../type/person.types'
 import { PersonsModel } from './person.model'
 import { addPersonToGroup, findGroupByName, removePersonFromGroup } from '../group/group.repo'
+import { IGroupDocument } from '../../../type/group.types'
 
 export async function createPerson(data) {
     await PersonsModel.create(data)
@@ -37,12 +38,13 @@ export async function addToGroup(personName: string, groupName: string) {
 
 export async function removeFromGroup(personName: string, groupName: string) {
     const personID = await (await findPersonByName(personName))._id
-    const groupExist = await removePersonFromGroup(personID, groupName)
+    const group = await findGroupByName(groupName)
 
-    if (groupExist) {
+    if (group) {
+        await removePersonFromGroup(personID, groupName)
         await PersonsModel.updateOne(
             { firstName: personName },
-            { $pull: { groups: groupName } },
+            { $pull: { groups: group._id } },
         );
         return `${personName} removed from ${groupName}`
     } else {
@@ -52,4 +54,18 @@ export async function removeFromGroup(personName: string, groupName: string) {
 
 export async function updateByName(filter: object, update: object) {
     return await PersonsModel.updateOne(filter, update)
+}
+
+export async function deleteGroupsRef(groupDoc: IGroupDocument) {
+    for (const groupID of groupDoc.groups) {
+        console.log(groupID)
+        await PersonsModel.updateMany(
+            { groups: groupID },
+            { $pull: { groups: groupID } },
+        )
+    }
+    await PersonsModel.updateMany(
+        { groups: groupDoc._id },
+        { $pull: { groups: groupDoc._id } },
+    )
 }

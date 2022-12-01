@@ -1,5 +1,6 @@
 import { Response, Request } from 'express';
 import { findGroupByName, createGroup, findAll, updateByName, deleteByName, addGroupToGroupDB, deleteGroupsArray } from "../../db/repo/group/group.repo";
+import {deleteGroupsRef} from "../../db/repo/person/person.repo";
 import { IGroupDocument } from '../../type/group.types';
 import { ifGroupNotInGroup, ifGroupNotIsPrototype, ifGroupNotItself } from '../service/group.service';
 import { createObject } from '../service/person.service';
@@ -9,12 +10,13 @@ export async function options(req: Request, res: Response) {
 }
 
 export async function create(req: Request, res: Response) {
-    const data = req.query;
+    const data = req.body;
+
     try {
         await createGroup(data)
-        res.send(`${data.name} created`)
+        res.send(`${data.groupName} created`)
     } catch (err) {
-        res.send('Error creating')
+        res.status(422).send('Error creating')
     }
 }
 
@@ -24,7 +26,7 @@ export async function get(req: Request, res: Response) {
         const result: IGroupDocument = await findGroupByName(String(groupName))
         res.send(result)
     } catch (err) {
-        res.send('Error getting')
+        res.status(422).send('Error getting')
     }
 }
 
@@ -33,7 +35,7 @@ export async function getAll(req: Request, res: Response) {
         const result = await findAll()
         res.send(result)
     } catch (err) {
-        res.send('Error getAll')
+        res.status(422).send('Error getAll')
     }
 }
 
@@ -45,7 +47,7 @@ export async function update(req: Request, res: Response) {
         await updateByName(groupToUpdate, updateFiled)
     } catch (err) {
         console.log(err.message);
-        res.send('updating error');
+        res.status(422).send('updating error');
     }
     res.send('updated')
 }
@@ -57,10 +59,11 @@ export async function _delete(req: Request, res: Response) {
         const groupDoc = await findGroupByName(groupName)
         await deleteGroupsArray(groupDoc.groups)
         await deleteByName(groupName)
+        await deleteGroupsRef(groupDoc)
         res.send('deleted')
     } catch (err) {
         console.log(err.message);
-        res.send('deleting error');
+        res.status(422).send('deleting error');
     }
 }
 
@@ -71,7 +74,7 @@ export async function addGroupToGroup(req: Request, res: Response) {
     try {
         const mainGroupDoc = await findGroupByName(mainGroup)
         const groupToAddDoc = await findGroupByName(groupToAdd)
-
+        
         if (
             mainGroupDoc &&
             groupToAddDoc &&
@@ -79,12 +82,12 @@ export async function addGroupToGroup(req: Request, res: Response) {
             ifGroupNotItself(String(mainGroupDoc._id), String(groupToAddDoc._id)) &&
             ifGroupNotIsPrototype(mainGroupDoc, groupToAddDoc)
         ) {
-            addGroupToGroupDB(mainGroupDoc.name, groupToAddDoc._id)
-            res.send('Add Group')
+            addGroupToGroupDB(mainGroupDoc.groupName, groupToAddDoc._id)
+            res.send(`Added ${groupToAdd} Group to ${mainGroup}`)
         } else {
-            res.send('Groups not exist')
+            res.status(422).send('Groups not exist')
         }
     } catch (err) {
-        res.send('Error ADD group To group')
+        res.status(422).send('Error ADD group To group')
     }
 }

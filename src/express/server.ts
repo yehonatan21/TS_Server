@@ -4,7 +4,7 @@ import groupRouter from "./route/group.route";
 import bodyParser from "body-parser";
 
 const app: Application = express();
-const PORT: Number | string = process.env.NODE_ENV || 5002;
+const PORT: Number | string = process.env.NODE_ENV || 5000;
 
 app.use(bodyParser.json());  
 

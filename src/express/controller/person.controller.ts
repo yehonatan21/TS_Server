@@ -12,7 +12,7 @@ export async function create(req: Request, res: Response) {
         await createPerson(data)
         res.send('create')
     } catch (err) {
-        res.send('Error creating')
+        res.status(422).send('Error creating')
     }
 }
 
@@ -26,7 +26,7 @@ export async function get(req: Request, res: Response) {
             res.send(result)
         }
     } catch (err) {
-        res.send('Error getting')
+        res.status(422).send('Error getting')
     }
 }
 
@@ -35,7 +35,7 @@ export async function getAll(req: Request, res: Response) {
         const result = await findAll()
         res.send(result)
     } catch (err) {
-        res.send('Error getAll')
+        res.status(422).send('Error getAll')
     }
 }
 
@@ -43,18 +43,19 @@ export async function addPersonToGroup(req: Request, res: Response) {
     const personName: string = req.params.personName
     const groupName: string = req.params.groupName
 
-    const existInGroup: Boolean = await checkIfExistInGroup(personName, groupName)
-    if (existInGroup) {
-        res.send('Person exist in group')
-    } else {
-        try {
+    try {
+        const existInGroup: Boolean = await checkIfExistInGroup(personName, groupName)
+        if (existInGroup) {
+            res.send('Person exist in group')
+        } else {
             const result = await addToGroup(personName, groupName)
             res.send(result)
-        } catch (err) {
-            console.log(err.message);
-            res.send('Error add person to group');
         }
+    } catch (err) {
+        console.log(err.message);
+        res.status(422).send('Error add person to group');
     }
+
 }
 
 export async function removePersonFromGroup(req: Request, res: Response) {
@@ -68,10 +69,10 @@ export async function removePersonFromGroup(req: Request, res: Response) {
             res.send(result)
         } catch (err) {
             console.log(err.message);
-            res.send('Error remove person to group');
+            res.status(422).send('Error remove person to group');
         }
     } else {
-        res.send('Person not exist in group')
+        res.status(422).send('Person not exist in group')
     }
 }
 
@@ -83,7 +84,7 @@ export async function update(req: Request, res: Response) {
         await updateByName(personToUpdate, updateFiled)
     } catch (err) {
         console.log(err.message);
-        res.send('updating error');
+        res.status(422).send('updating error');
     }
     res.send('updated')
 }
@@ -94,7 +95,7 @@ export async function _delete(req: Request, res: Response) {
         await deleteByName(personName)
     } catch (err) {
         console.log(err.message);
-        res.send('deleting error');
+        res.status(422).send('deleting error');
     }
     res.send('deleted')
     const data = req.body;

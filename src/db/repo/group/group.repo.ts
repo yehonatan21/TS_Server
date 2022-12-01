@@ -3,11 +3,11 @@ import { GroupModel } from './group.model'
 
 export async function createGroup(data) {
     await GroupModel.create(data)
-    console.log(data.name + ' created.')
+    console.log(data.groupName + ' created.')
 }
 
 export async function findGroupByName(name: String): Promise<IGroupDocument> {
-    return await GroupModel.findOne({ name: name }).lean()
+    return await GroupModel.findOne({ groupName: name }).lean()
 }
 
 export async function findAll() {
@@ -19,7 +19,6 @@ export async function findGroupById(groupID: string) {
 }
 
 export async function addPersonToGroup(personId: string, groupId: string) {
-    // const ifGroupExist = await findGroupByName(groupName)
     const ifGroupExist = await findGroupById(groupId)
 
     if (!ifGroupExist) {
@@ -34,21 +33,16 @@ export async function addPersonToGroup(personId: string, groupId: string) {
 
 export async function addGroupToGroupDB(mainGroup: string, groupToAddId: string) {
     return await GroupModel.updateOne(
-        { name: mainGroup },
+        { groupName: mainGroup },
         { $push: { groups: groupToAddId } },
     );
 }
 
 export async function removePersonFromGroup(personId: string, groupName: string) {
-    const GroupExist = await findGroupByName(groupName)
-    if (!GroupExist) {
-        return GroupExist
-    } else {
-        return await GroupModel.updateOne(
-            { name: groupName },
-            { $pull: { persons: personId } },
-        );
-    }
+    return await GroupModel.updateOne(
+        { groupName: groupName },
+        { $pull: { persons: personId } },
+    );
 }
 
 export async function updateByName(filter: object, update: object) {
@@ -58,9 +52,9 @@ export async function updateByName(filter: object, update: object) {
 export async function deleteByName(groupName: string) {
     const groups = (await findGroupByName(groupName)).groups
     for (const group of groups) {
-        await GroupModel.deleteOne({ name: group })
+        await GroupModel.deleteOne({ groupName: group })
     }
-    return await GroupModel.deleteOne({ name: groupName })
+    return await GroupModel.deleteOne({ groupName: groupName })
 }
 
 export async function deleteGroupsArray(groupsID: string[]) {
