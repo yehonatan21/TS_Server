@@ -8,6 +8,10 @@ router.get('/', controller.options);
 
 router.get('/get/:groupName', controller.get)
 
+router.get('/getHierarchy/:groupName', controller.getHierarchy)
+
+router.get('/searchPersonInGroup/:groupName/:personName', controller.searchPerson)
+
 router.get('/getAll', controller.getAll)
 
 router.post('/create', Validator('createGroupSchema'), controller.create)

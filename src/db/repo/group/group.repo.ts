@@ -1,4 +1,5 @@
 import { IGroupDocument } from '../../../type/group.types'
+import { IPersonDocument } from '../../../type/person.types'
 import { GroupModel } from './group.model'
 
 export async function createGroup(data) {
@@ -10,23 +11,40 @@ export async function findGroupByName(name: String): Promise<IGroupDocument> {
     return await GroupModel.findOne({ groupName: name }).lean()
 }
 
+export async function getGroupHierarchy(name: String): Promise<IGroupDocument> { // FIXME: return docs, not references
+    return await GroupModel.findOne({ groupName: name }, 'persons groups').lean()
+}
+
 export async function findAll() {
     return await GroupModel.find()
 }
 
-export async function findGroupById(groupID: string) {
+export async function findPersonInGroup(groupName: string, personName: string): Promise<IGroupDocument> {
+    return await GroupModel.findOne({ 'groupName': groupName }, {
+        persons: {
+            $elemMatch: {
+                name: {
+                    $regex: personName,
+                    $options: 'i'
+                }
+            }
+        }
+    })
+}
+
+export async function findGroupById(groupID: string): Promise<IGroupDocument> {
     return await GroupModel.findOne({ _id: groupID }).lean()
 }
 
-export async function addPersonToGroup(personId: string, groupId: string) {
+export async function addPersonToGroup(person: IPersonDocument, groupId: string) {
     const ifGroupExist = await findGroupById(groupId)
-
     if (!ifGroupExist) {
         return ifGroupExist
     } else {
+        const personRef = { 'name': person.firstName, 'id': person._id }//TODO: take out to function
         return await GroupModel.updateOne(
             { _id: groupId },
-            { $push: { persons: personId } },
+            { $push: { persons: personRef } },
         );
     }
 }

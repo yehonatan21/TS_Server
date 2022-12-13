@@ -4,12 +4,12 @@ import { connectToDB, disconnectFromDB } from "../db/initialize";
 (async () => {
 	connectToDB();
 	const persons = [
-		// {
-		// 	firstName: "Rachel",
-		// 	lastName: "Green",
-		// 	age: 25,
-		// 	email: "a@gmail.com"
-		// },
+		{
+			firstName: "Rachel",
+			lastName: "Green",
+			age: 25,
+			email: "a@gmail.com"
+		},
 		{
 			firstName: "Ross",
 			lastName: "Geller",

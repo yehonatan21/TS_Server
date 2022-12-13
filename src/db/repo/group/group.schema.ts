@@ -7,7 +7,10 @@ const GroupSchema = new Mongoose.Schema({
         default: null
     },
     persons: {
-        type: [String],
+        type: [{
+            name: String,
+            id: String
+        }],
         default: null
     },
     dateOfJoining: {

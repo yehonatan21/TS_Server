@@ -8,6 +8,8 @@ router.get('/', controller.options);
 
 router.get('/get/:firstName', controller.get)
 
+router.get('/getPersonsGroup/:firstName', controller.getPersonsGroup)
+
 router.get('/getAll', controller.getAll)
 
 router.post('/create', Validator('createPersonSchema'), controller.create)

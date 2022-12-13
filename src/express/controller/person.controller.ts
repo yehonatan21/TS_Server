@@ -1,5 +1,5 @@
 import { Response, Request } from 'express';
-import { findPersonByName, createPerson, findAll, updateByName, deleteByName, addToGroup, removeFromGroup } from "../../db/repo/person/person.repo";
+import { findPersonByName, createPerson, findAll, updateByName, deleteByName, addToGroup, removeFromGroup, findPersonGroup } from "../../db/repo/person/person.repo";
 import { checkIfExistInGroup, createObject } from '../service/person.service';
 
 export async function options(req: Request, res: Response) {
@@ -22,6 +22,20 @@ export async function get(req: Request, res: Response) {
         const result = await findPersonByName(name)
         if (result === null) {
             res.send('Cant find that person')
+        } else {
+            res.send(result)
+        }
+    } catch (err) {
+        res.status(422).send('Error getting')
+    }
+}
+
+export async function getPersonsGroup(req: Request, res: Response) {
+    const name = req.params.firstName;
+    try {
+        const result = await findPersonGroup(name)
+        if (result === null) {
+            res.status(422).send('Cant find that person')
         } else {
             res.send(result)
         }

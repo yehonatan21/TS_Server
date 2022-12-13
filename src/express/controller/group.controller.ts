@@ -1,5 +1,5 @@
 import { Response, Request } from 'express';
-import { findGroupByName, createGroup, findAll, updateByName, deleteByName, addGroupToGroupDB, deleteGroupsArray } from "../../db/repo/group/group.repo";
+import { findGroupByName, createGroup, findAll, updateByName, deleteByName, addGroupToGroupDB, deleteGroupsArray, getGroupHierarchy, findPersonInGroup } from "../../db/repo/group/group.repo";
 import {deleteGroupsRef} from "../../db/repo/person/person.repo";
 import { IGroupDocument } from '../../type/group.types';
 import { ifGroupNotInGroup, ifGroupNotIsPrototype, ifGroupNotItself } from '../service/group.service';
@@ -26,6 +26,30 @@ export async function get(req: Request, res: Response) {
         const result: IGroupDocument = await findGroupByName(String(groupName))
         res.send(result)
     } catch (err) {
+        res.status(422).send('Error getting')
+    }
+}
+
+export async function getHierarchy(req: Request, res: Response) {
+    const groupName = req.params.groupName;
+    try {
+        const result: IGroupDocument = await getGroupHierarchy(String(groupName))
+        res.send(result)
+    } catch (err) {
+        res.status(422).send('Error getting')
+    }
+}
+
+export async function searchPerson(req: Request, res: Response) { 
+    const groupName = req.params.groupName;
+    const personName = req.params.personName;
+
+    try {
+        const result = await findPersonInGroup(groupName,personName)
+        console.log(result.persons)
+        res.send(result)
+    } catch (err) {
+        console.log(err.message)
         res.status(422).send('Error getting')
     }
 }
