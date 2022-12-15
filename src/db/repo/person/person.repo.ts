@@ -13,7 +13,7 @@ export async function findPersonByName(name: String): Promise<IPersonDocument> {
 }
 
 export async function findPersonGroup(name: String): Promise<IPersonDocument> {
-    return await PersonsModel.findOne({ firstName: name }, 'groups').lean()// FIXME: return docs, not references
+    return await PersonsModel.findOne({ firstName: name }, 'groups').lean()
 }
 
 export async function findAll(): Promise<[IPersonDocument]> {
@@ -27,7 +27,6 @@ export async function deleteByName(name: object) {
 export async function addToGroup(personName: string, groupName: string) {
     const person = await findPersonByName(personName)
     const group = await findGroupByName(groupName)
-    // console.log(typeof String(personID))
 
     const groupExist = await addPersonToGroup(person, group._id)
     
@@ -64,7 +63,6 @@ export async function updateByName(filter: object, update: object) {
 
 export async function deleteGroupsRef(groupDoc: IGroupDocument) {
     for (const groupID of groupDoc.groups) {
-        console.log(groupID)
         await PersonsModel.updateMany(
             { groups: groupID },
             { $pull: { groups: groupID } },
