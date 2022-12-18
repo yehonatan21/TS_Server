@@ -7,7 +7,7 @@ export async function options(req: Request, res: Response) {
 }
 
 export async function create(req: Request, res: Response) {
-    const data = req.query;
+    const data = req.body;
     try {
         await createPerson(data)
         res.send('create')
