@@ -19,18 +19,28 @@ export async function findAll() {
     return await GroupModel.find()
 }
 
-export async function findPersonInGroup(groupName: string, personName: string): Promise<IGroupDocument> {
-    return await GroupModel.findOne({ 'groupName': groupName }, {
-        persons: {
-            $elemMatch: {
-                name: {
-                    $regex: personName,
-                    $options: 'i'
-                }
-            }
-        }
-    })
+export async function findPersonInGroup(groupName: string, personName: string) {
+    try {
+        const result = await GroupModel.findOne({ groupName: groupName }).
+            populate('persons')
+        return result
+    } catch (err) {
+        console.log(err.message)
+    }
 }
+
+// export async function findPersonInGroup(groupName: string, personName: string): Promise<IGroupDocument> {
+//     return await GroupModel.findOne({ 'groupName': groupName }, {
+//         persons: {
+//             $elemMatch: {
+//                 name: {
+//                     $regex: personName,
+//                     $options: 'i'
+//                 }
+//             }
+//         }
+//     })
+// }
 
 export async function findGroupById(groupID: string): Promise<IGroupDocument> {
     return await GroupModel.findOne({ _id: groupID }).lean()
@@ -41,10 +51,10 @@ export async function addPersonToGroup(person: IPersonDocument, groupId: string)
     if (!ifGroupExist) {
         return ifGroupExist
     } else {
-        const personRef = { 'name': person.firstName, 'id': person._id }//TODO: take out to function
+        //BUG: when update the persons name in the document the name ref is not updating
         return await GroupModel.updateOne(
             { _id: groupId },
-            { $push: { persons: personRef } },
+            { $push: { persons: person._id } },
         );
     }
 }

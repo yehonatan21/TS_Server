@@ -46,7 +46,6 @@ export async function searchPerson(req: Request, res: Response) {
 
     try {
         const result = await findPersonInGroup(groupName,personName)
-        console.log(result.persons)
         res.send(result)
     } catch (err) {
         console.log(err.message)

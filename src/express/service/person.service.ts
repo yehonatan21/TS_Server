@@ -2,6 +2,7 @@ import { findGroupByName } from "../../db/repo/group/group.repo";
 import { findPersonByName } from "../../db/repo/person/person.repo";
 
 export async function checkIfExistInGroup(personName: string, groupName: string): Promise<Boolean> {
+    //BUG: not checking
     const person = await findPersonByName(personName)
     const group = await findGroupByName(groupName)
 

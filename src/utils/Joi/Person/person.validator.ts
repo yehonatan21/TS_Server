@@ -8,13 +8,13 @@ export function Validator(validatorName: string) {
 
     return async function (req: Request, res: Response, next: NextFunction) {
         try {
-            await Validators[validatorName].validateAsync(req.body)
+            await Validators[validatorName].validateAsync(req.body);
             next()
         } catch (err) {
             if (err.isJoi)
                 return next(createHttpError(422, `${validatorName} - ${err.message}`))
             // return next(`${validatorName} - ${err.message}`)
-            next(createHttpError(500))
+            next(createHttpError(500));
         }
     }
 }

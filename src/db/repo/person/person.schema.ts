@@ -1,4 +1,4 @@
-import Mongoose from "mongoose";
+import Mongoose, { Schema } from "mongoose";
 
 const PersonsSchema = new Mongoose.Schema({
     firstName: String,
@@ -6,7 +6,7 @@ const PersonsSchema = new Mongoose.Schema({
     age: Number,
     email: String,
     groups: {
-        type: [String],
+        type: [{ type: Schema.Types.ObjectId, ref: 'groupModel' }],
         default: null
     },
     dateOfJoining: {
