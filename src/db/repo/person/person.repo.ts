@@ -5,8 +5,13 @@ import { IGroupDocument } from '../../../type/group.types'
 
 export async function createPerson(data) {
     await PersonsModel.create(data)
-    console.log(data.firstName + ' created.')
 }
+
+// export function createPerson(data) {
+//     PersonsModel.create({ data }, (err) => {
+//         if (err) return err.message;
+//     })
+// }
 
 export async function findPersonByName(name: String): Promise<IPersonDocument> {
     return await PersonsModel.findOne({ firstName: name }).lean()
@@ -28,9 +33,9 @@ export async function addToGroup(personName: string, groupName: string) {
     const person = await findPersonByName(personName)
     const group = await findGroupByName(groupName)
 
-    const groupExist = await addPersonToGroup(person, group._id)
+    const isAdded = await addPersonToGroup(person, group._id)
     
-    if (groupExist) {
+    if (isAdded) {
         await PersonsModel.updateOne(
             { _id: person._id },
             { $push: { groups: group._id } },

@@ -3,9 +3,9 @@ import { startServer } from './express/server'
 
 try {
     connectToDB();
-    startServer()
+    startServer();
 }
 catch (err) {
     console.log(err.message)
-    disconnectFromDB()
+    disconnectFromDB();
 }
